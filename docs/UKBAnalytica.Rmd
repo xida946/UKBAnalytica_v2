@@ -1125,7 +1125,7 @@ results <- runmulti_*(
 
 ## Best Practices {#best-practices}
 
-### 1. Check Correlations First
+### Check Correlations First
 
 ```{r best-practice-1, eval=FALSE}
 # Identify multicollinearity before regression
@@ -1138,7 +1138,7 @@ corr_mat <- run_correlation(
 # If two variables have |r| > 0.8, consider removing one
 ```
 
-### 2. Start with Univariate, Then Multivariate
+### Start with Univariate, Then Multivariate
 
 ```{r best-practice-2, eval=FALSE}
 # Step 1: Screen all variables without adjustment
@@ -1158,7 +1158,7 @@ multi_results <- runmulti_lm(
 )
 ```
 
-### 3. Validate Model Assumptions
+### Validate Model Assumptions
 
 ```{r best-practice-3, eval=FALSE}
 # For linear models: check residuals
@@ -1174,7 +1174,7 @@ model <- coxph(Surv(time, status) ~ x + age, data = dt)
 cox.zph(model)  # Test PH assumption
 ```
 
-### 4. Handle Missing Data Appropriately
+### Handle Missing Data Appropriately
 
 ```{r best-practice-4, eval=FALSE}
 # Check missingness
@@ -1186,7 +1186,7 @@ dt_complete <- dt[complete.cases(dt[, .(outcome, var1, var2, age, sex)])]
 # Or use multiple imputation (see Chapter 6)
 ```
 
-### 5. Run Sensitivity Analysis Preprocessing
+### Run Sensitivity Analysis Preprocessing
 
 Use the built-in sensitivity preprocessing helpers when you want to keep the
 main regression interface unchanged but fit models on restricted datasets.

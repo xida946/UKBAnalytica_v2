@@ -2,6 +2,7 @@
 
 ## UKBAnalytica 0.6.1 (2026-04-07)
 add sensitivity analysis module and refine the docs.
+- add `select_incident_by_years()` utility to split incident cases within or after a year cutoff from enrollment.
 
 ## UKBAnalytica 0.6.0 (2026-04-02)
 

@@ -33,6 +33,7 @@ survival datasets.
 - Includes predefined definitions for common cardiovascular and metabolic diseases.
 - Provides standardized preprocessing for common UKB baseline variables.
 - **Advanced analysis modules**: subgroup analysis, propensity score methods, mediation analysis, and multiple imputation pooling.
+- Includes sensitivity preprocessing helpers for restricted-dataset regression analyses.
 
 ## Installation
 
@@ -53,7 +54,7 @@ The package covers the following workflow:
 4. **Survival analysis** -- Build Cox-ready datasets with proper prevalent/incident classification.
 5. **Baseline tables** -- Create Table 1 summaries stratified by case/control status.
 6. **Multiple imputation** -- Impute missing covariates and merge results back to the full dataset.
-7. **Main analysis** -- Correlation analysis and regression models (linear, logistic, Cox).
+7. **Main analysis** -- Correlation analysis, regression models, and sensitivity preprocessing.
 8. **Advanced analysis** -- Subgroup analysis, propensity score, mediation, MI pooling.
 
 The remaining chapters walk through each step with code examples.
@@ -69,6 +70,8 @@ The remaining chapters walk through each step with code examples.
 | `preprocess_baseline()` | Preprocess baseline characteristics |
 | `create_baseline_table()` | Create a Table 1 (via `tableone`) |
 | `run_imputation()` | Multiple imputation with `mice` |
+| `sensitivity_exclude_early_events()` | Remove early events before time-to-event regression |
+| `sensitivity_exclude_missing_covariates()` | Remove rows with missing specified covariates |
 
 ## Advanced analysis functions
 

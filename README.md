@@ -83,6 +83,7 @@ head(analysis_dt[, .(
 - **Propensity Score Methods**: PSM matching and IPTW weighting
 - **Mediation Analysis**: Causal mediation using regmedint backend
 - **MI Pooling**: Multiple imputation result combining (Rubin's Rules)
+- **Sensitivity Analysis Preprocessing**: Exclude early events or rows with missing covariates before regression
 - **Machine Learning**: Unified ML interface with SHAP interpretation
 - **Visualization**: Forest plots, K-M curves, balance plots, SHAP plots
 
@@ -154,10 +155,34 @@ med <- run_mediation(
 plot_mediation(med, type = "effects")
 ```
 
+## Sensitivity Analysis Example
+
+```r
+# Remove events occurring in the first 2 years of follow-up
+dt_sens1 <- sensitivity_exclude_early_events(
+  data = analysis_dt,
+  endpoint = c("outcome_surv_time", "outcome_status"),
+  n_years = 2
+)
+
+# Remove rows with any missing adjustment covariate
+dt_sens2 <- sensitivity_exclude_missing_covariates(
+  data = dt_sens1,
+  covariates = c("age", "sex", "bmi", "smoking")
+)
+
+# Pass directly to the standard regression interface
+cox_sens <- runmulti_cox(
+  data = dt_sens2,
+  main_var = c("bmi", "sbp"),
+  covariates = c("age", "sex", "bmi", "smoking"),
+  endpoint = c("outcome_surv_time", "outcome_status")
+)
+```
+
 ## Supplementary Materials
 Here we provide some learning materials for UK Biobank in which you may be interested:
 - [UK Biobank database browser](https://biobank.ndph.ox.ac.uk/ukb/index.cgi)
 - [UK Biobank RAP platform](https://ukbiobank.dnanexus.com/landing)
 - [UK Biobank learning guides supported by our team](https://hinna0818.github.io/Bioinfo-SMU/Epidemiology/UK_Biobank/) 
-
 

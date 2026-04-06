@@ -58,30 +58,14 @@
 #' interactions and causal interpretation. Psychological Methods. 2013;18(2):137-150.
 #'
 #' @examples
-#' \dontrun
-#' # Linear outcome model
+#' \dontrun{
 #' result <- run_mediation(
 #'   data = mydata,
 #'   exposure = "treatment",
 #'   mediator = "bmi",
-#'   outcome = "blood_pressure",
-#'   covariates = c("age", "sex"),
-#'   mediator_type = "continuous",
-#'   outcome_type = "linear"
+#'   outcome = "blood_pressure"
 #' )
 #' summary(result)
-#'
-#' # Cox survival model
-#' result_cox <- run_mediation(
-#'   data = mydata,
-#'   exposure = "smoking",
-#'   mediator = "bmi",
-#'   outcome = "time",
-#'   covariates = c("age", "sex"),
-#'   mediator_type = "continuous",
-#'   outcome_type = "cox",
-#'   endpoint = c("time", "status")
-#' )
 #' }
 #'
 #' @export

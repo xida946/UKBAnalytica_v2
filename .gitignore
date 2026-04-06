@@ -27,6 +27,8 @@ tests/test_demo.R
 *~
 *.swp
 *.swo
+.tmp-lib/
+.tmp-lib-local/
 
 # wechat file
 wechat-article.md

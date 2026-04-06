@@ -332,12 +332,14 @@ create_imputation_list <- function(datasets, validate = TRUE) {
 #' @return An object of class \code{mi_pooled_result}.
 #'
 #' @examples
-#' \dontrun
-#' # Pool mean differences from each imputation
-#' mean_diffs <- list(0.5, 0.6, 0.4, 0.55, 0.45)
-#' variances <- list(matrix(0.01), matrix(0.012), matrix(0.011),
-#'                   matrix(0.009), matrix(0.013))
-#' pooled <- pool_custom_estimates(mean_diffs, variances, labels = "Mean Diff")
+#' \dontrun{
+#' estimates <- list(c(effect = 0.5), c(effect = 0.6), c(effect = 0.4))
+#' variances <- list(
+#'   matrix(0.01, nrow = 1),
+#'   matrix(0.012, nrow = 1),
+#'   matrix(0.011, nrow = 1)
+#' )
+#' pooled <- pool_custom_estimates(estimates, variances, labels = "effect")
 #' }
 #'
 #' @export

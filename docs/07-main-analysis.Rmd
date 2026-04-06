@@ -350,6 +350,40 @@ dt_complete <- dt[complete.cases(dt[, .(outcome, var1, var2, age, sex)])]
 # Or use multiple imputation (see Chapter 6)
 ```
 
+### 5. Run Sensitivity Analysis Preprocessing
+
+Use the built-in sensitivity preprocessing helpers when you want to keep the
+main regression interface unchanged but fit models on restricted datasets.
+
+```{r best-practice-5, eval=FALSE}
+# Cox sensitivity analysis: exclude events in the first 2 years
+dt_sens1 <- sensitivity_exclude_early_events(
+  data = analysis_dt,
+  endpoint = c("outcome_surv_time", "outcome_status"),
+  n_years = 2
+)
+
+# Remove rows with any missing adjustment covariate
+dt_sens2 <- sensitivity_exclude_missing_covariates(
+  data = dt_sens1,
+  covariates = c("age", "sex", "bmi", "smoking")
+)
+
+# Feed directly into the standard regression function
+results_sens <- runmulti_cox(
+  data = dt_sens2,
+  main_var = c("bmi", "sbp"),
+  covariates = c("age", "sex", "bmi", "smoking"),
+  endpoint = c("outcome_surv_time", "outcome_status")
+)
+print(results_sens)
+```
+
+**When to use these helpers:**
+
+- `sensitivity_exclude_early_events()`: reduce reverse-causation concerns in survival analyses
+- `sensitivity_exclude_missing_covariates()`: enforce complete covariate data for a specified adjustment set
+
 ---
 
 ## Summary
@@ -360,6 +394,7 @@ This chapter covered:
 - **Linear regression:** `runmulti_lm()` for continuous outcomes
 - **Logistic regression:** `runmulti_logit()` for binary outcomes  
 - **Cox regression:** `runmulti_cox()` for survival outcomes
+- **Sensitivity preprocessing:** `sensitivity_exclude_early_events()` and `sensitivity_exclude_missing_covariates()`
 - **Best practices:** Workflow recommendations for robust analyses
 
 All functions follow a consistent interface, making it easy to switch between analysis types while maintaining reproducible code.

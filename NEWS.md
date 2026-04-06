@@ -1,5 +1,8 @@
 # UKBAnalytica News
 
+## UKBAnalytica 0.6.1 (2026-04-07)
+add sensitivity analysis module and refine the docs.
+
 ## UKBAnalytica 0.6.0 (2026-04-02)
 
 ### New Module: Machine Learning

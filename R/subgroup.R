@@ -26,8 +26,8 @@ NULL
 #'     \item{n}{Sample size in subgroup}
 #'     \item{n_event}{Number of events (for Cox/logistic models)}
 #'     \item{estimate}{Effect estimate (HR for Cox, OR for logistic, Beta for linear)}
-#'     \item{lower95}{Lower 95\% CI}
-#'     \item{upper95}{Upper 95\% CI}
+#'     \item{lower95}{Lower 95\\% CI}
+#'     \item{upper95}{Upper 95\\% CI}
 #'     \item{pvalue}{P-value for the exposure effect}
 #'     \item{p_interaction}{P-value for interaction between exposure and subgroup}
 #'   }

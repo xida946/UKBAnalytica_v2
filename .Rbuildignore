@@ -14,5 +14,6 @@
 ^examples$
 ^xxx\.Rmd$
 ^docs$
+^data-raw$
 ^\.github$
 ^_site$

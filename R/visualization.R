@@ -25,7 +25,7 @@ NULL
 #' @param log_scale Logical; whether to use log scale for x-axis. Default TRUE.
 #' @param colors Character vector of colors. Default NULL uses ggplot2 defaults.
 #' @param title Character string for plot title. Default "Subgroup Analysis".
-#' @param xlab Character string for x-axis label. Default "Hazard Ratio (95\% CI)".
+#' @param xlab Character string for x-axis label. Default "Hazard Ratio (95\\% CI)".
 #' @param show_n Logical; whether to show sample size. Default TRUE.
 #' @param show_events Logical; whether to show event count. Default TRUE.
 #'
@@ -1968,4 +1968,3 @@ plot_shap_force <- function(object,
   
   p
 }
-

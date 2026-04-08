@@ -42,3 +42,7 @@ Suggests:
     randomForestSRC
 Config/testthat/edition: 3
 Config/Needs/bioc: FALSE
+Depends: 
+    R (>= 3.5)
+LazyData: true
+LazyDataCompression: xz

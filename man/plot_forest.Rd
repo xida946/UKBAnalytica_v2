@@ -45,7 +45,7 @@ Default "estimate".}
 
 \item{title}{Character string for plot title. Default "Subgroup Analysis".}
 
-\item{xlab}{Character string for x-axis label. Default "Hazard Ratio (95\\% CI)".}
+\item{xlab}{Character string for x-axis label. Default "Hazard Ratio (95\\\% CI)".}
 
 \item{show_n}{Logical; whether to show sample size. Default TRUE.}
 

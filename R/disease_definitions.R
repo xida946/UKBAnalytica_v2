@@ -69,6 +69,8 @@ create_disease_definition <- function(name,
 #'   \item{Stroke}{Stroke (ischemic and hemorrhagic)}
 #'   \item{Hypertension}{Essential and secondary hypertension}
 #'   \item{Diabetes}{Diabetes Mellitus (all types)}
+#'   \item{T1DM}{Type 1 Diabetes Mellitus}
+#'   \item{T2DM}{Type 2 Diabetes Mellitus}
 #'   \item{Vascular_Disease}{Peripheral vascular disease}
 #' }
 #'
@@ -136,6 +138,16 @@ get_predefined_diseases <- function() {
       icd10_pattern = "^(E10|E11|E12|E13|E14)",
       icd9_pattern = "^250",
       sr_codes = c(1220, 1221, 1222, 1223)
+    ),
+    T1DM = create_disease_definition(
+      name = "Type 1 Diabetes Mellitus",
+      icd10_pattern = "^E10",
+      sr_codes = c(1222)
+    ),
+    T2DM = create_disease_definition(
+      name = "Type 2 Diabetes Mellitus",
+      icd10_pattern = "^E11",
+      sr_codes = c(1223)
     ),
 
     # Vascular diseases

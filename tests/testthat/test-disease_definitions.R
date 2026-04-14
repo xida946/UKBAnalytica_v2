@@ -20,11 +20,16 @@ test_that("get_predefined_diseases returns valid list", {
   expect_true("AA" %in% names(diseases))
   expect_true("Hypertension" %in% names(diseases))
   expect_true("Diabetes" %in% names(diseases))
+  expect_true("T1DM" %in% names(diseases))
+  expect_true("T2DM" %in% names(diseases))
   
   # Check structure of a disease definition
   aa <- diseases$AA
   expect_equal(aa$name, "Aortic Aneurysm")
   expect_equal(aa$icd10_pattern, "^I71")
+
+  expect_equal(diseases$T1DM$icd10_pattern, "^E10")
+  expect_equal(diseases$T2DM$icd10_pattern, "^E11")
 })
 
 test_that("combine_disease_definitions merges correctly", {

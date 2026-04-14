@@ -64,6 +64,8 @@ utils::globalVariables(c(
   "algo_date",
   "COPD_prevalent", "COPD_prevalent_icd", "COPD_prevalent_spirometry",
   "COPD_prevalent_source", "COPD_incident", "COPD_spirometry", "COPD_gold_grade",
+  "T1DM_history", "T2DM_history", "T2DM_history_enhanced", "Diabetes_history",
+  "diabetes_hba1c", "diabetes_subtype", "hba1c_value",
   "default_end", "incident_surv_time",
   "fev1", "fvc", "fev1_fvc_ratio", "fev1_predicted_pct", "obstruction",
   # Survival module

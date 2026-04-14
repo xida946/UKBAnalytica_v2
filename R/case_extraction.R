@@ -643,6 +643,124 @@ extract_disease_history <- function(dt,
 }
 
 
+#' @title Extract Baseline Diabetes Subtypes (T1DM/T2DM) with HbA1c Support
+#'
+#' @description
+#' Extracts baseline prevalent Type 1 and Type 2 diabetes using existing
+#' source-based disease history logic, and optionally augments Type 2
+#' classification using baseline HbA1c.
+#'
+#' @param dt A data.table or data.frame containing UKB data.
+#' @param disease_definitions Named list of disease definitions. If NULL,
+#'   uses \code{\link{get_predefined_diseases}}.
+#' @param sources Character vector specifying sources for baseline history.
+#'   Options: "ICD10", "ICD9", "Self-report", "Death", "Algorithm".
+#' @param baseline_col Column name for baseline date. Default: \code{"p53_i0"}.
+#' @param hba1c_col Column name for baseline HbA1c (mmol/mol).
+#'   Default: \code{"p30750_i0"}.
+#' @param hba1c_threshold Numeric threshold for diabetes by HbA1c.
+#'   Default: \code{48} mmol/mol (equivalent to 6.5 percent).
+#' @param include_hba1c Logical. If TRUE (default), HbA1c is used to
+#'   augment T2DM classification.
+#'
+#' @return A data.table with columns:
+#'   \describe{
+#'     \item{eid}{Participant identifier}
+#'     \item{T1DM_history}{Baseline prevalent T1DM from selected sources (0/1)}
+#'     \item{T2DM_history}{Baseline prevalent T2DM from selected sources (0/1)}
+#'     \item{diabetes_hba1c}{Baseline HbA1c diabetes flag (0/1/NA)}
+#'     \item{T2DM_history_enhanced}{T2DM from source history OR HbA1c criterion (0/1)}
+#'     \item{Diabetes_history}{Any baseline diabetes (T1DM or enhanced T2DM) (0/1)}
+#'     \item{diabetes_subtype}{"Type1", "Type2", or "No_diabetes"}
+#'   }
+#'
+#' @details
+#' This is a baseline classification helper and does not redefine incident
+#' event logic. Type 1 has priority when both T1 and T2 evidence are present.
+#'
+#' @examples
+#' \dontrun{
+#' dm_base <- extract_diabetes_subtype_baseline(
+#'   dt = ukb_data,
+#'   sources = c("ICD10", "ICD9", "Self-report"),
+#'   include_hba1c = TRUE
+#' )
+#' }
+#'
+#' @export
+extract_diabetes_subtype_baseline <- function(dt,
+                                              disease_definitions = NULL,
+                                              sources = c("ICD10", "ICD9", "Self-report"),
+                                              baseline_col = "p53_i0",
+                                              hba1c_col = "p30750_i0",
+                                              hba1c_threshold = 48,
+                                              include_hba1c = TRUE) {
+
+  if (!data.table::is.data.table(dt)) {
+    dt <- data.table::as.data.table(dt)
+  }
+
+  if (is.null(disease_definitions)) {
+    disease_definitions <- get_predefined_diseases()
+  }
+
+  required_defs <- c("T1DM", "T2DM")
+  missing_defs <- setdiff(required_defs, names(disease_definitions))
+  if (length(missing_defs) > 0) {
+    stop(sprintf(
+      "Missing disease definition(s): %s. Please provide T1DM and T2DM in disease_definitions.",
+      paste(missing_defs, collapse = ", ")
+    ))
+  }
+
+  dm_hist <- extract_disease_history(
+    dt = dt,
+    diseases = required_defs,
+    disease_definitions = disease_definitions,
+    sources = sources,
+    baseline_col = baseline_col
+  )
+
+  result_dt <- data.table::copy(dm_hist)
+
+  if (include_hba1c) {
+    if (!hba1c_col %in% names(dt)) {
+      warning(sprintf("HbA1c column not found: %s. Falling back to source-only classification.", hba1c_col))
+      result_dt[, diabetes_hba1c := NA_integer_]
+    } else {
+      hba1c_dt <- unique(dt[, .(eid, hba1c_value = suppressWarnings(as.numeric(get(hba1c_col))))], by = "eid")
+      result_dt <- data.table::merge.data.table(result_dt, hba1c_dt, by = "eid", all.x = TRUE)
+      result_dt[, diabetes_hba1c := data.table::fifelse(
+        is.na(hba1c_value),
+        NA_integer_,
+        as.integer(hba1c_value >= hba1c_threshold)
+      )]
+      result_dt[, hba1c_value := NULL]
+    }
+  } else {
+    result_dt[, diabetes_hba1c := NA_integer_]
+  }
+
+  result_dt[, T2DM_history_enhanced := {
+    t2_code <- data.table::fifelse(is.na(T2DM_history), 0L, T2DM_history)
+    hba1c_dm <- data.table::fifelse(is.na(diabetes_hba1c), 0L, diabetes_hba1c)
+    as.integer((t2_code == 1L) | (hba1c_dm == 1L))
+  }]
+
+  result_dt[, Diabetes_history := {
+    t1_code <- data.table::fifelse(is.na(T1DM_history), 0L, T1DM_history)
+    as.integer((t1_code == 1L) | (T2DM_history_enhanced == 1L))
+  }]
+
+  result_dt[, diabetes_subtype := "No_diabetes"]
+  result_dt[T2DM_history_enhanced == 1L, diabetes_subtype := "Type2"]
+  result_dt[T1DM_history == 1L, diabetes_subtype := "Type1"]
+
+  data.table::setorder(result_dt, eid)
+  return(result_dt[])
+}
+
+
 #' @title Extract Disease History with Multiple Source Comparisons
 #'
 #' @description

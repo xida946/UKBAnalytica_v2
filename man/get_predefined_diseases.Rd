@@ -25,6 +25,8 @@ Included diseases:
 \item{Stroke}{Stroke (ischemic and hemorrhagic)}
 \item{Hypertension}{Essential and secondary hypertension}
 \item{Diabetes}{Diabetes Mellitus (all types)}
+\item{T1DM}{Type 1 Diabetes Mellitus}
+\item{T2DM}{Type 2 Diabetes Mellitus}
 \item{Vascular_Disease}{Peripheral vascular disease}
 }
 }

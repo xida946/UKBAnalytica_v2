@@ -9,9 +9,9 @@
 
 <img src="man/figures/logo.png" align="right" height="139" alt="UKBAnalytica logo" />
 
-**UKBAnalytica** is a high-performance R package for processing UK Biobank (UKB)
+**UKBAnalytica** is a high-performance R package for processing UK Biobank 
 Research Analysis Platform (RAP) data exports. It focuses on standardized
-phenotyping, survival-ready datasets, and scalable preprocessing.
+phenotyping, survival-ready datasets, calable preprocessing, and downstream analysis.
 
 **For details, please visit**: [Full documentation for UKBAnalytica](https://hinna0818.github.io/UKBAnalytica/)
 

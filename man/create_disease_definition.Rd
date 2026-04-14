@@ -9,7 +9,8 @@ create_disease_definition(
   icd10_pattern = NULL,
   icd9_pattern = NULL,
   sr_codes = NULL,
-  algo_date_field = NULL
+  algo_date_field = NULL,
+  algo_source_field = NULL
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ create_disease_definition(
 outcome date (Category 42). For example, 42016 for COPD, 42014 for Asthma.
 The corresponding data column is expected as \code{p{field}_i0}.
 Records with date \code{1900-01-01} are treated as unknown and excluded.}
+
+\item{algo_source_field}{Integer. UKB field ID for the algorithmically-defined
+outcome source (Category 42). For example, 42017 for COPD source and
+42015 for Asthma source. Stored as metadata for source provenance.}
 }
 \value{
 A list containing the disease definition parameters.

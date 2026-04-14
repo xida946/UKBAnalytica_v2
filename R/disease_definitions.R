@@ -13,6 +13,9 @@
 #'   outcome date (Category 42). For example, 42016 for COPD, 42014 for Asthma.
 #'   The corresponding data column is expected as \code{p{field}_i0}.
 #'   Records with date \code{1900-01-01} are treated as unknown and excluded.
+#' @param algo_source_field Integer. UKB field ID for the algorithmically-defined
+#'   outcome source (Category 42). For example, 42017 for COPD source and
+#'   42015 for Asthma source. Stored as metadata for source provenance.
 #'
 #' @return A list containing the disease definition parameters.
 #'
@@ -38,13 +41,15 @@ create_disease_definition <- function(name,
                                        icd10_pattern = NULL,
                                        icd9_pattern = NULL,
                                        sr_codes = NULL,
-                                       algo_date_field = NULL) {
+                                       algo_date_field = NULL,
+                                       algo_source_field = NULL) {
   list(
     name = name,
     icd10_pattern = icd10_pattern,
     icd9_pattern = icd9_pattern,
     sr_codes = sr_codes,
-    algo_date_field = algo_date_field
+    algo_date_field = algo_date_field,
+    algo_source_field = algo_source_field
   )
 }
 
@@ -111,7 +116,19 @@ get_predefined_diseases <- function() {
       name = "Myocardial Infarction",
       icd10_pattern = "^(I21|I22)",
       icd9_pattern = "^410",
-      sr_codes = c(1066)
+      sr_codes = c(1066),
+      algo_date_field = 42000,
+      algo_source_field = 42001
+    ),
+    STEMI = create_disease_definition(
+      name = "ST-Elevation Myocardial Infarction",
+      algo_date_field = 42002,
+      algo_source_field = 42003
+    ),
+    NSTEMI = create_disease_definition(
+      name = "Non-ST-Elevation Myocardial Infarction",
+      algo_date_field = 42004,
+      algo_source_field = 42005
     ),
     HF = create_disease_definition(
       name = "Heart Failure",
@@ -123,7 +140,24 @@ get_predefined_diseases <- function() {
       name = "Stroke",
       icd10_pattern = "^(I60|I61|I62|I63|I64)",
       icd9_pattern = "^(430|431|432|433|434|436)",
-      sr_codes = c(1068)
+      sr_codes = c(1068),
+      algo_date_field = 42006,
+      algo_source_field = 42007
+    ),
+    Ischaemic_Stroke = create_disease_definition(
+      name = "Ischaemic Stroke",
+      algo_date_field = 42008,
+      algo_source_field = 42009
+    ),
+    Intracerebral_Haemorrhage = create_disease_definition(
+      name = "Intracerebral Haemorrhage",
+      algo_date_field = 42010,
+      algo_source_field = 42011
+    ),
+    Subarachnoid_Haemorrhage = create_disease_definition(
+      name = "Subarachnoid Haemorrhage",
+      algo_date_field = 42012,
+      algo_source_field = 42013
     ),
 
     # Metabolic diseases
@@ -177,14 +211,16 @@ get_predefined_diseases <- function() {
       icd10_pattern = "^(J45|J46)",
       icd9_pattern = "^493",
       sr_codes = c(1111),
-      algo_date_field = 42014
+      algo_date_field = 42014,
+      algo_source_field = 42015
     ),
     COPD = create_disease_definition(
       name = "Chronic Obstructive Pulmonary Disease",
       icd10_pattern = "^(J40|J41|J42|J43|J44)",
       icd9_pattern = "^(491|492|4932|496)",
       sr_codes = c(1112, 1113, 1472),
-      algo_date_field = 42016
+      algo_date_field = 42016,
+      algo_source_field = 42017
     ),
 
     # Renal and metabolic
@@ -193,6 +229,11 @@ get_predefined_diseases <- function() {
       icd10_pattern = "^(N18|N19)",
       icd9_pattern = "^(585|586)",
       sr_codes = c(1192, 1193, 1194, 1405, 1582, 1675)
+    ),
+    ESRD = create_disease_definition(
+      name = "End Stage Renal Disease",
+      algo_date_field = 42026,
+      algo_source_field = 42027
     ),
     Hyperlipidemia = create_disease_definition(
       name = "Hyperlipidemia/High Cholesterol",
@@ -234,13 +275,52 @@ get_predefined_diseases <- function() {
       name = "Parkinson's Disease",
       icd10_pattern = "^G20",
       icd9_pattern = "^3320",
-      sr_codes = c(1262)
+      sr_codes = c(1262),
+      algo_date_field = 42032,
+      algo_source_field = 42033
+    ),
+    Parkinsonism = create_disease_definition(
+      name = "All-Cause Parkinsonism",
+      algo_date_field = 42030,
+      algo_source_field = 42031
+    ),
+    Progressive_Supranuclear_Palsy = create_disease_definition(
+      name = "Progressive Supranuclear Palsy",
+      algo_date_field = 42034,
+      algo_source_field = 42035
+    ),
+    Multiple_System_Atrophy = create_disease_definition(
+      name = "Multiple System Atrophy",
+      algo_date_field = 42036,
+      algo_source_field = 42037
     ),
     Dementia = create_disease_definition(
       name = "Dementia/Alzheimer's Disease",
       icd10_pattern = "^(F00|F01|F02|F03|G30)",
       icd9_pattern = "^(290|3310)",
-      sr_codes = c(1263)
+      sr_codes = c(1263),
+      algo_date_field = 42018,
+      algo_source_field = 42019
+    ),
+    Alzheimers_Disease = create_disease_definition(
+      name = "Alzheimer's Disease",
+      algo_date_field = 42020,
+      algo_source_field = 42021
+    ),
+    Vascular_Dementia = create_disease_definition(
+      name = "Vascular Dementia",
+      algo_date_field = 42022,
+      algo_source_field = 42023
+    ),
+    Frontotemporal_Dementia = create_disease_definition(
+      name = "Frontotemporal Dementia",
+      algo_date_field = 42024,
+      algo_source_field = 42025
+    ),
+    Motor_Neurone_Disease = create_disease_definition(
+      name = "Motor Neurone Disease",
+      algo_date_field = 42028,
+      algo_source_field = 42029
     ),
     Epilepsy = create_disease_definition(
       name = "Epilepsy",

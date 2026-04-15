@@ -61,7 +61,7 @@ utils::globalVariables(c(
   "default_surv_time", "control_surv_time", "primary_outcome_prevalent",
   "outcome_status", "outcome_surv_time", "outcome_prevalent",
   # Algorithm and spirometry module
-  "algo_date",
+  "algo_date", "algo_source",
   "COPD_prevalent", "COPD_prevalent_icd", "COPD_prevalent_spirometry",
   "COPD_prevalent_source", "COPD_incident", "COPD_spirometry", "COPD_gold_grade",
   "T1DM_history", "T2DM_history", "T2DM_history_enhanced", "Diabetes_history",

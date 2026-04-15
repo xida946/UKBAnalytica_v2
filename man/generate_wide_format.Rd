@@ -22,7 +22,9 @@ generate_wide_format(
 Valid options: "ICD10", "ICD9", "Self-report", "Death", "Algorithm".
 "Algorithm" uses UK Biobank algorithmically-defined outcomes (Category 42)
 which combine multiple data sources with high positive predictive value.
-Requires \code{algo_date_field} in the disease definition.}
+Requires \code{algo_date_field} in the disease definition.
+If \code{algo_source_field} is also provided, output
+\code{diagnosis_source} is refined as \code{"Algorithm_<source_code>"}.}
 
 \item{censor_date}{Administrative censoring date.}
 

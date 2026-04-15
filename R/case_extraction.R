@@ -12,6 +12,8 @@
 #'   "Algorithm" uses UK Biobank algorithmically-defined outcomes (Category 42)
 #'   which combine multiple data sources with high positive predictive value.
 #'   Requires \code{algo_date_field} in the disease definition.
+#'   If \code{algo_source_field} is also provided, output
+#'   \code{diagnosis_source} is refined as \code{"Algorithm_<source_code>"}.
 #' @param censor_date Administrative censoring date.
 #' @param baseline_col Column name for baseline assessment date.
 #'
@@ -31,6 +33,8 @@
 #' outcome adjudication group, combining self-report, hospital admissions,
 #' and death records with high positive predictive value.
 #' Records with date \code{1900-01-01} are excluded (date unknown).
+#' If a source field is available in the definition, it is propagated into
+#' \code{diagnosis_source} as \code{"Algorithm_<source_code>"}.
 #'
 #' @examples
 #' \dontrun{
@@ -103,12 +107,38 @@ extract_cases_by_source <- function(dt,
     if ("Algorithm" %in% sources && !is.null(def$algo_date_field)) {
       algo_col <- paste0("p", def$algo_date_field, "_i0")
       if (algo_col %in% names(dt)) {
-        algo_dt <- dt[, .(eid, algo_date = as.Date(get(algo_col)))]
+        algo_source_col <- if (!is.null(def$algo_source_field)) {
+          paste0("p", def$algo_source_field, "_i0")
+        } else {
+          NULL
+        }
+
+        has_algo_source <- !is.null(algo_source_col) && algo_source_col %in% names(dt)
+
+        if (has_algo_source) {
+          algo_dt <- dt[, .(
+            eid,
+            algo_date = as.Date(get(algo_col)),
+            algo_source = as.character(get(algo_source_col))
+          )]
+        } else {
+          algo_dt <- dt[, .(
+            eid,
+            algo_date = as.Date(get(algo_col)),
+            algo_source = NA_character_
+          )]
+        }
+
         # Exclude 1900-01-01 (date unknown) and NA
         algo_dt <- algo_dt[!is.na(algo_date) & algo_date != as.Date("1900-01-01")]
         if (nrow(algo_dt) > 0) {
-          algo_dt[, `:=`(disease = disease_key, earliest_date = algo_date, source = "Algorithm")]
-          algo_dt[, algo_date := NULL]
+          algo_dt[, source := data.table::fifelse(
+            !is.na(algo_source) & trimws(algo_source) != "",
+            paste0("Algorithm_", trimws(algo_source)),
+            "Algorithm"
+          )]
+          algo_dt[, `:=`(disease = disease_key, earliest_date = algo_date)]
+          algo_dt[, c("algo_date", "algo_source") := NULL]
           diagnosis_sources$algo <- algo_dt
         }
       } else {

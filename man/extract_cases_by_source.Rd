@@ -21,7 +21,9 @@ extract_cases_by_source(
 Valid options: "ICD10", "ICD9", "Self-report", "Death", "Algorithm".
 "Algorithm" uses UK Biobank algorithmically-defined outcomes (Category 42)
 which combine multiple data sources with high positive predictive value.
-Requires \code{algo_date_field} in the disease definition.}
+Requires \code{algo_date_field} in the disease definition.
+If \code{algo_source_field} is also provided, output
+\code{diagnosis_source} is refined as \code{"Algorithm_<source_code>"}.}
 
 \item{censor_date}{Administrative censoring date.}
 
@@ -49,6 +51,8 @@ The "Algorithm" source reads date fields from UK Biobank Category 42
 outcome adjudication group, combining self-report, hospital admissions,
 and death records with high positive predictive value.
 Records with date \code{1900-01-01} are excluded (date unknown).
+If a source field is available in the definition, it is propagated into
+\code{diagnosis_source} as \code{"Algorithm_<source_code>"}.
 }
 \examples{
 \dontrun{

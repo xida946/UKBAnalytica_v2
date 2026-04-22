@@ -193,6 +193,13 @@ cox_sens <- runmulti_cox(
 )
 ```
 
+## Basic Workflow Demonstration for Chinese Users
+请各位用户注意，**UKB的数据是不能下载到本地的**，这个R包开发的目的是提高研究人员在官方的RAP平台上的数据分析效率。当你在做一个UKB研究的时候，首先要获取你想要的数据（注意这里说的download指的是从云平台获取你研究相关的数据，不是下载到本地）。获取最常见的人口学数据可以使用`inst/python/ukb_data_loader.py`，配合一个`field_ids.txt`，在RAP的服务器的终端，就可以直接用命令行来获取了（脚本默认取了eid列，所以不用单独管eid）。血浆蛋白的数据可以用`inst/python/protein_loader.py`来获取，也是类似的命令行获取。
+
+其次，对于疾病诊断和前瞻性队列的生存时间计算，可以参考使用`build_survival_dataset()`函数，不同的sources对应疾病诊断来源，比如ICD、自我报告、算法定义、死亡这些。`primary_disease`就是你的主疾病。参数`disease_definitions`就是一个疾病定义的格式，具体可以看文档（如果自己要定义的话）。函数返回会有`xx_history`和`xx_incident`的列，history就是baseline及其前患病，如果是前瞻性队列就要去掉；incident对应前瞻性的事件发生，可以用来做cox回归。主疾病经过这个函数有两列是直接可以用于cox的，分别是`outcome_status`和`outcome_surv_time`，一个是事件是否发生0/1，另一个是生存时间。为什么要设置outcome sources和primary_sources？原因是有时候我们希望把基线患特定疾病作为协变量进行调整，这个函数就方便计算了。
+
+后续的研究就是个性化的分析，常规的回归分析、生存分析、亚组分析、统计检验、机器学习等模块我们都有纳入。这个看自己情况来做即可。这个包的函数是很灵活的，希望大家好好挖掘，有建议可以提issue或者PR。
+
 ## Supplementary Materials
 Here we provide some learning materials for UK Biobank in which you may be interested:
 - [UK Biobank database browser](https://biobank.ndph.ox.ac.uk/ukb/index.cgi)
